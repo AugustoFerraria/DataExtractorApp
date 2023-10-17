@@ -1,4 +1,4 @@
-package com.example.DataExtractorApp.servise;
+package com.example.DataExtractorApp.service;
 
 import java.util.Arrays;
 import java.util.List;

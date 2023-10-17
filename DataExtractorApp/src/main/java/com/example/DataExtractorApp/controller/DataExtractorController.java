@@ -18,7 +18,7 @@ import com.example.DataExtractorApp.dto.ProvinceIta;
 import com.example.DataExtractorApp.dto.ResponseBody;
 import com.example.DataExtractorApp.repository.ProvinceItaRepository;
 import com.example.DataExtractorApp.response.ResponseGenerator;
-import com.example.DataExtractorApp.servise.DataExtractorService;
+import com.example.DataExtractorApp.service.DataExtractorService;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
