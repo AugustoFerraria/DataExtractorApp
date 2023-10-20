@@ -13,6 +13,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
 import com.example.DataExtractorApp.dto.ComuneDose;
+import com.example.DataExtractorApp.serializer.JsonSerializer;
 
 @Configuration
 public class KafkaProducerConfiguration {
@@ -23,14 +24,19 @@ public class KafkaProducerConfiguration {
 		Map<String, Object> props = new HashMap<>();
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, boostrapServers);
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, boostrapServers);
+		props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 		return props;
 	}
 
 	@Bean
 	public ProducerFactory<String, ComuneDose> producerFactory() {
-		return new DefaultKafkaProducerFactory<>(producerConfig());
+	    Map<String, Object> props = new HashMap<>();
+	    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, boostrapServers);
+	    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+	    props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+	    return new DefaultKafkaProducerFactory<>(props);
 	}
+
 	
 	@Bean
 	public KafkaTemplate<String, ComuneDose> kafkaTemplate(
