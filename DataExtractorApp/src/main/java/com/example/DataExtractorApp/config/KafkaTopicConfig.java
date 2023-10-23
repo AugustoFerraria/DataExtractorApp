@@ -19,6 +19,7 @@ public class KafkaTopicConfig {
 
 	@Bean
 	public KafkaAdmin admin() {
+		// Configurazione dell'amministratore Kafka.
 		Map<String, Object> configs = new HashMap<>();
 		configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, systemConfig.bootstrapServers);
 		return new KafkaAdmin(configs);
@@ -26,6 +27,7 @@ public class KafkaTopicConfig {
 
 	@Bean
 	public NewTopic covidDosesTopic() {
+		// Definizione di un nuovo topic Kafka per le dosi di COVID-19.
 		return TopicBuilder.name(systemConfig.topicName).compact().build();
 	}
 }

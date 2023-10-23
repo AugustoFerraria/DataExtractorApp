@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.DataExtractorApp.dto.ProvinceIta;
@@ -24,6 +25,7 @@ import com.example.DataExtractorApp.service.DataExtractorService;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@RequestMapping(path = "/api")
 @Slf4j
 public class DataExtractorController {
 	@Autowired
@@ -41,6 +43,7 @@ public class DataExtractorController {
 		log.info(String.format("requestSendRecords - startCallDate %s", startCallDate));
 
 		try {
+			// Chiamata al Service per inviare i record.
 			dataExtractorService.sendRecords();
 			body = ResponseGenerator.generateResponse("RequestSendRecords completato correttamente.", HttpStatus.OK,
 					startCallDate);
@@ -61,6 +64,7 @@ public class DataExtractorController {
 
 		try {
 			for (ProvinceIta province : provinces) {
+				// Chiamata al Service per salvare le province.
 				dataExtractorService.saveProvince(province);
 			}
 
@@ -80,9 +84,11 @@ public class DataExtractorController {
 		log.info(String.format("getAllProvinces - startCallDate %s", startCallDate));
 
 		try {
+			// Recupero di tutte le province dalla Database.
 			List<ProvinceIta> allProvinces = provinceItaRepository.findAll();
 			Map<String, String> provinceMap = new HashMap<>();
 
+			// Creazione di una mappa delle province.
 			for (ProvinceIta province : allProvinces) {
 				provinceMap.put(province.getCodice(), province.getNome());
 			}
@@ -103,17 +109,19 @@ public class DataExtractorController {
 		log.info(String.format("deleteAllProvinces - startCallDate %s", startCallDate));
 
 		try {
+			// Eliminazione di tutte le province dalla Database.
 			provinceItaRepository.deleteAll();
 
 			body = ResponseGenerator.generateResponse("Tutte le province sono state eliminate con successo.",
 					HttpStatus.OK, startCallDate);
 		} catch (Exception e) {
-			log.error("Error while deleting provinces: " + e.getMessage());
+			log.error("Errore durante l'eliminazione delle province: " + e.getMessage());
 			body = ResponseGenerator.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, startCallDate);
 		}
 
 		return ResponseEntity.ok(body);
 	}
+
 	/*
 	 Per caricare il database Postgres utilizza questo URL "http://localhost:8080/addAllProvinces" con il Header POST e il body
 	 "[

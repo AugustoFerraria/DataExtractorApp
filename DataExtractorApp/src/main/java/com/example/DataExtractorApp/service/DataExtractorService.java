@@ -34,17 +34,20 @@ public class DataExtractorService {
 	private ApplicationConfig applicationConfig;
 
 	public List<ProvinceIta> getProvinces() {
+		// Recupera tutte le province dalla Database.
 		return provinceItaRepository.findAll();
 	}
 
 	@Transactional
 	public void saveProvince(ProvinceIta province) {
+		// Salva una provincia nella Database.
 		entityManager.persist(province);
 	}
 
 	public List<ComuneDose> processProvincesForKafka() {
 		List<ProvinceIta> provinces = getProvinces();
 
+		// Crea una mappa di province utilizzando il nome come chiave e il codice come valore.
 		Map<String, String> comuneMap = provinces.stream()
 				.collect(Collectors.toMap(province -> province.getNome().toUpperCase(), ProvinceIta::getCodice));
 
@@ -57,6 +60,7 @@ public class DataExtractorService {
 	}
 
 	private List<ComuneDose> transferComuneData(ComuneApiDataFetcher[] comuneAPIData, Map<String, String> comuneMap) {
+		// Trasforma i dati della API in oggetti ComuneDose.
 		return Arrays.stream(comuneAPIData).map(comuneApiDataFetcher -> {
 			ComuneDose comuneDose = new ComuneDose();
 			comuneDose.setCodice(comuneApiDataFetcher.getCodistat_comune_dom());
@@ -74,6 +78,7 @@ public class DataExtractorService {
 	public List<ComuneDose> sendRecords() {
 		List<ComuneDose> comuneDoseList = processProvincesForKafka();
 
+		// Invia i record al topic Kafka.
 		comuneDoseList.forEach(comune -> kafkaTemplate.send(kafkaConfig.topicName, comune.getCodice(), comune));
 
 		return comuneDoseList;

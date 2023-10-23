@@ -21,6 +21,7 @@ public class KafkaProducerConfiguration {
 	private String boostrapServers;
 
 	public Map<String, Object> producerConfig() {
+		// Configurazione del produttore Kafka.
 		Map<String, Object> props = new HashMap<>();
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, boostrapServers);
 		props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -30,6 +31,7 @@ public class KafkaProducerConfiguration {
 
 	@Bean
 	public ProducerFactory<String, ComuneDose> producerFactory() {
+	    // Factory per creare il produttore Kafka.
 	    Map<String, Object> props = new HashMap<>();
 	    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, boostrapServers);
 	    props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -37,11 +39,11 @@ public class KafkaProducerConfiguration {
 	    return new DefaultKafkaProducerFactory<>(props);
 	}
 
-	
 	@Bean
 	public KafkaTemplate<String, ComuneDose> kafkaTemplate(
 			ProducerFactory<String, ComuneDose> producerFactory
 			){
-		return new KafkaTemplate<> (producerFactory);
+		// Template per l'invio di messaggi a un topic Kafka.
+		return new KafkaTemplate<>(producerFactory);
 	}
 }
