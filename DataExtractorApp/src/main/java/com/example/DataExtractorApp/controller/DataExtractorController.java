@@ -33,12 +33,13 @@ public class DataExtractorController {
 	@Autowired
 	private ProvinceItaRepository provinceItaRepository;
 
+	
 	@CrossOrigin(origins = "*", allowedHeaders = "*", originPatterns = "*")
+	
 	@GetMapping(value = "/requestSendRecords")
 	public ResponseEntity<?> requestSendRecords() {
 		@SuppressWarnings("rawtypes")
 		ResponseBody body;
-
 		Date startCallDate = new Date();
 		log.info(String.format("requestSendRecords - startCallDate %s", startCallDate));
 
